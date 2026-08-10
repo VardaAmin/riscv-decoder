@@ -13,6 +13,40 @@ typedef struct {
     int32_t immediate;
 } InstructionFields;
 
+typedef enum {
+    INST_UNKNOWN,
+    INST_ADD,
+    INST_SUB,
+    INST_AND,
+    INST_OR,
+    INST_XOR,
+    INST_SLT,
+    INST_SLTU,
+    INST_SLL,
+    INST_SRL,
+    INST_SRA,
+    INST_ADDI,
+    INST_ANDI,
+    INST_ORI,
+    INST_XORI,
+    INST_SLTI,
+    INST_SLTIU,
+    INST_SLLI,
+    INST_SRLI,
+    INST_SRAI,
+    INST_LW,
+    INST_SW,
+    INST_BEQ,
+    INST_BNE,
+    INST_LUI,
+    INST_AUIPC,
+    INST_JAL,
+    INST_JALR
+} InstructionType;
+
 InstructionFields decode_fields(uint32_t instruction);
+
+InstructionType decode_instruction(const InstructionFields *fields);
+
 
 #endif
