@@ -23,10 +23,21 @@ InstructionFields decode_fields(uint32_t instruction)
     fields.rs2    = EXTRACT_BITS(instruction, 24, 20);
     fields.funct7 = EXTRACT_BITS(instruction, 31, 25);
 
-    fields.immediate = sign_extend(
-    EXTRACT_BITS(instruction, 31, 20),
-    12
-);
+        if (fields.opcode == 0x23)
+    {
+        uint32_t immediate =
+            (EXTRACT_BITS(instruction, 31, 25) << 5) |
+            EXTRACT_BITS(instruction, 11, 7);
+
+        fields.immediate = sign_extend(immediate, 12);
+    }
+    else
+    {
+        fields.immediate = sign_extend(
+            EXTRACT_BITS(instruction, 31, 20),
+            12
+        );
+    }
     return fields;
 }
 
@@ -164,6 +175,32 @@ InstructionType decode_instruction(const InstructionFields *fields)
             }
 
             break;
+
+        case 0x03:
+            switch (fields->funct3)
+            {
+                case 0x2:
+                    return INST_LW;
+
+                default:
+                    break;
+            }
+
+            break;
+
+        case 0x23:
+            switch (fields->funct3)
+            {
+                case 0x2:
+                    return INST_SW;
+
+                default:
+                    break;
+            }
+
+            break;
+
+
 
         default:
             break;
